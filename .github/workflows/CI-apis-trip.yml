@@ -1,14 +1,14 @@
-name: CI/CD UserProfile nodejs
+name: CI/CD Trips go
 
 on:
   push:
     branches: [ master ]
-    paths: [ apis/userprofile/**, .github/workflows/CI-apis-userprofile.yml ]
+    paths: [ apis/trips/**, .github/workflows/CI-apis-trip.yml ]
   pull_request:
     branches: [ master ]
     paths: 
-      - apis/userprofile/**
-      - .github/workflows/CI-apis-userprofile.yml
+      - apis/trips/**
+      - .github/workflows/CI-apis-trip.yml
 
 jobs:
   build:
@@ -17,21 +17,18 @@ jobs:
 
     defaults:
       run:
-        working-directory: apis/userprofile 
+        working-directory: apis/trips 
     steps:
     - name: Checkout the source code
       uses: actions/checkout@v2
 
-    - name: Setup nodejs
-      uses: actions/setup-node@v1
+    - name: Setup golang
+      uses: actions/setup-go@v1
       with:
-        node-version: 12
+        go-version: '^1.13.1'
 
-    - name: Install dependencies
-      run: npm install
-      
-    - name: Test Userprofile
-      run: npm run test --if-exists
+    - name: Test trips
+      run: go test ./tests
 
     - name: Build Docker image
       uses: docker/build-push-action@v1
@@ -44,8 +41,8 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: docker.pkg.github.com
-        repository: ${{ github.repository }}/userprofile
-        path: apis/userprofile
+        repository: ${{ github.repository }}/trips
+        path: apis/trips
         tag_with_ref: true
         
     - name: On error -> Create issue 

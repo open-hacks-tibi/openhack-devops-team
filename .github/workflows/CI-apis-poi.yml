@@ -19,18 +19,21 @@ jobs:
       run:
         working-directory: apis/poi 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout the source code
+      uses: actions/checkout@v2
+
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 2.1.801
+
     - name: Install dependencies
       run: dotnet restore
       
-    - name: Build
+    - name: Build POI
       run: dotnet build --configuration Release --no-restore
       
-    - name: Test
+    - name: Test POI
       run: dotnet test --configuration Release --no-build --verbosity normal
 
     - name: Build Docker image
@@ -48,7 +51,6 @@ jobs:
         path: apis/poi/web
         tag_with_ref: true
         
-
     - name: On error -> Create issue 
       if: ${{ failure() }}
       uses: actions/github-script@v2
