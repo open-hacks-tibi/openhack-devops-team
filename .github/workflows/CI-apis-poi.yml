@@ -44,7 +44,7 @@ jobs:
         registry: docker.pkg.github.com
         repository: $ {{ github.repository }}/poi
         path: apis/poi/web
-        tag_with_sha: true
+        tag_with_ref: true
 
     - name: Create issue
       if: ${{ failure() }}
