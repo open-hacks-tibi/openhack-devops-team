@@ -42,8 +42,8 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: docker.pkg.github.com
-        repository: openhack2020/tripsinsights/poi
-        path: ${{ github.workspace	}}/apis/poi/web
+        repository: $ {{ github.repository }}/poi
+        path: apis/poi/web
         tag_with_sha: true
 
     - name: Create issue
