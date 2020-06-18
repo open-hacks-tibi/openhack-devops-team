@@ -3,10 +3,12 @@ name: .NET Core
 on:
   push:
     branches: [ master ]
+    paths: [ apis/poi/**, .github/workflows/CI-apis-poi.yml ]
   pull_request:
     branches: [ master ]
     paths: 
       - apis/poi/**
+      - .github/workflows/CI-apis-poi.yml
 
 jobs:
   build:
@@ -45,8 +47,9 @@ jobs:
         repository: ${{ github.repository }}/poi
         path: apis/poi/web
         tag_with_ref: true
+        build_args: SQL_USER=${{ secrets.SQL_USER }},SQL_PASSWORD=${{ secrets.SQL_PASSWORD }},SQL_SERVER=openhacktibi123sql.database.windows.net,SQL_DBNAME=mydrivingDB
 
-    - name: Create issue
+    - name: On error -> Create issue 
       if: ${{ failure() }}
       uses: actions/github-script@v2
       with:
