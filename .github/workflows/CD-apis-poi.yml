@@ -47,7 +47,7 @@ jobs:
     - name: 'Deploy to Azure Web App for Container'
       uses: azure/webapps-deploy@v2
       with: 
-        app-name: openhackl5u1jy65poi
+        app-name: openhacktibi123poi
         images: docker.pkg.github.com/${{ github.repository }}/poi:${{ github.ref }}
 
     - name: On error -> Create issue 
@@ -63,3 +63,4 @@ jobs:
             title: "${{ env.build_name }} Workflow ${{ github.run_number }} Failed! ",
             body: body
           });
+
