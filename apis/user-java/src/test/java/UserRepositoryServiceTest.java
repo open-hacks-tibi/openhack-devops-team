@@ -27,7 +27,7 @@ public class UserRepositoryServiceTest {
 
     private Profile profile;
 
-    private Integer ranking = 2;
+    private Integer ranking = 3;
     private Float distance  = 2000F;
 
     @Mock
