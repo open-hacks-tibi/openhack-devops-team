@@ -1,9 +1,6 @@
-name: CI/CD POI .NET Core
+name: CI POI .NET Core
 
 on:
-  push:
-    branches: [ master ]
-    paths: [ apis/poi/**, .github/workflows/CI-apis-poi.yml ]
   pull_request:
     branches: [ master ]
     paths: 
@@ -35,35 +32,6 @@ jobs:
       
     - name: Test POI
       run: dotnet test --configuration Release --no-build --verbosity normal
-
-    - name: Build Docker image
-      uses: docker/build-push-action@v1
-      env:
-        SQL_USER: ${{ secrets.SQL_USER }}
-        SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
-        SQL_SERVER: openhacktibi123sql.database.windows.net
-        SQL_DBNAME: mydrivingDB
-      with:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-        registry: docker.pkg.github.com
-        repository: ${{ github.repository }}/poi
-        path: apis/poi/web
-        tag_with_ref: true
-
-    - name: Package repo authenticate
-      uses: azure/docker-login@v1
-      with:
-        login-server: docker.pkg.github.com
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: 'Deploy to Azure Web App for Container'
-      uses: azure/webapps-deploy@v2
-      with: 
-        publish-profile: ${{ secrets.POI_AZURE_WEBAPP_PUBLISH_PROFILE }}
-        app-name: openhackl5u1jy65poi
-        images: docker.pkg.github.com/${{ github.repository }}/poi:${{ github.ref }}
 
     - name: On error -> Create issue 
       if: ${{ failure() }}
