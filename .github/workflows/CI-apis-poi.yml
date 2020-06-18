@@ -3,8 +3,6 @@ name: .NET Core
 on:
   push:
     branches: [ master ]
-    paths: 
-      - apis/poi/**
   pull_request:
     branches: [ master ]
     paths: 
@@ -45,8 +43,8 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: docker.pkg.github.com
         repository: openhack2020/tripsinsights/poi
-        path: apis/poi/web
-        tag_with_ref: true
+        path: ${{ github.workspace	}}/apis/poi/web
+        tag_with_sha: true
 
     - name: Create issue
       if: ${{ failure() }}
