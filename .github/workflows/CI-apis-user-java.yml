@@ -47,6 +47,7 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: docker.pkg.github.com
         repository: ${{ github.repository }}/user-java
+        path: apis/user-java
         tag_with_ref: true
 
     - name: On error -> Create issue 
