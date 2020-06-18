@@ -25,7 +25,7 @@ jobs:
         registry: docker.pkg.github.com
         repository: ${{ github.repository }}/poi
         path: apis/poi/web
-        tag_with_sha: true
+        tags: ${{ github.sha }}
       env:
         SQL_USER: ${{ secrets.SQL_USER }}
         SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
@@ -70,7 +70,7 @@ jobs:
       uses: azure/webapps-deploy@v2
       with: 
         app-name: openhacktibi123poi
-        images: docker.pkg.github.com/${{ github.repository }}/poi
+        images: docker.pkg.github.com/${{ github.repository }}/poi:${{ github.sha }}
 
     - name: On error -> Create issue 
       if: ${{ failure() }}
