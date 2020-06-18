@@ -1,14 +1,15 @@
+
 name: CI/CD POI .NET Core
 
 on:
   push:
     branches: [ master ]
-    paths: [ apis/poi/**, .github/workflows/CI-apis-poi.yml ]
+    paths: [ apis/user-java/**, .github/workflows/CI-apis-user-java.yml ]
   pull_request:
     branches: [ master ]
     paths: 
-      - apis/poi/**
-      - .github/workflows/CI-apis-poi.yml
+      - apis/user-java/**
+      - .github/workflows/CI-apis-user-java.yml
 
 jobs:
   build:
@@ -17,21 +18,23 @@ jobs:
 
     defaults:
       run:
-        working-directory: apis/poi 
+        working-directory: apis/user-java 
+
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+    - name: Checkout the source code
+      uses: actions/checkout@v2
+
+    - name: Setup Java 11
+      uses: actions/setup-java@v1
       with:
-        dotnet-version: 2.1.801
-    - name: Install dependencies
-      run: dotnet restore
-      
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-      
-    - name: Test
-      run: dotnet test --configuration Release --no-build --verbosity normal
+        java-version: 11
+
+    - name: Build user-java
+        run: mvn -B package --file pom.xml
+
+    - name: Test user-java
+        run: mvn test --file pom.xml
+
 
     - name: Build Docker image
       uses: docker/build-push-action@v1
@@ -44,10 +47,10 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: docker.pkg.github.com
-        repository: ${{ github.repository }}/poi
-        path: apis/poi/web
+        repository: ${{ github.repository }}/user-java
+        path: apis/user-java
         tag_with_ref: true
-        
+       
 
     - name: On error -> Create issue 
       if: ${{ failure() }}
