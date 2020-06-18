@@ -70,7 +70,7 @@ jobs:
       uses: azure/webapps-deploy@v2
       with: 
         app-name: openhacktibi123poi
-        images: docker.pkg.github.com/${{ github.repository }}/poi:${{ github.sha }}
+        images: ${{ github.repository }}/poi:${{ github.sha }}
 
     - name: On error -> Create issue 
       if: ${{ failure() }}
