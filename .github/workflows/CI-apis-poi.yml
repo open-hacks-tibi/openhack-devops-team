@@ -47,7 +47,7 @@ jobs:
         repository: ${{ github.repository }}/poi
         path: apis/poi/web
         tag_with_ref: true
-        build_args: -e SQL_USER=${{ secrets.SQL_USER }} -e SQL_PASSWORD=${{ secrets.SQL_PASSWORD }} -e SQL_SERVER=openhacktibi123sql.database.windows.net -e SQL_DBNAME=mydrivingDB
+        
 
     - name: On error -> Create issue 
       if: ${{ failure() }}
