@@ -35,18 +35,18 @@ jobs:
 
     - name: Build Docker image
       uses: docker/build-push-action@v1
-      with:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-        registry: docker.pkg.github.com
-        repository: openhack2020/tripsinsights/poi
-        tag_with_ref: true
-        working-directory: apis/poi/web
       env:
         SQL_USER: ${{ secrets.SQL_USER }}
         SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
         SQL_SERVER: openhacktibi123sql.database.windows.net
         SQL_DBNAME: mydrivingDB
+      with:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        registry: docker.pkg.github.com
+        repository: openhack2020/tripsinsights/poi
+        dockerfile: apis/poi/web/Dockerfile
+        tag_with_ref: true
 
     - name: Create issue
       if: ${{ failure() }}
