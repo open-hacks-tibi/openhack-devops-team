@@ -33,7 +33,7 @@ jobs:
       run: mvn -B package --file pom.xml
 
     - name: Test user-java
-      run: mvn test --file pom.xml
+      run: mvn test
 
     - name: Build Docker image
       uses: docker/build-push-action@v1

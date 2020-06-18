@@ -27,7 +27,7 @@ public class UserRepositoryServiceTest {
 
     private Profile profile;
 
-    private Integer ranking = 3;
+    private Integer ranking = 2;
     private Float distance  = 2000F;
 
     @Mock
@@ -65,7 +65,7 @@ public class UserRepositoryServiceTest {
         profile.setTotalDistance(distance);
         when(userRepository.save(profile)).thenReturn(profile);
         Profile updated = userRepositoryService.update(profile);
-        assertEquals(ranking, updated.getRanking());
+        assertEquals(ranking + 1, updated.getRanking());
         assertEquals(distance, updated.getTotalDistance());
     }
 
