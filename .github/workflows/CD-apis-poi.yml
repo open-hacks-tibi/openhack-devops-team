@@ -3,7 +3,7 @@ name: CD POI .NET Core
 on:
   push:
     branches: [ master ]
-    paths: [ apis/poi/**, .github/workflows/CI-apis-poi.yml ]
+    paths: [ apis/poi/**, .github/workflows/CD-apis-poi.yml ]
 
 jobs:
   build:
