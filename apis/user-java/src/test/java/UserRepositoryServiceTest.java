@@ -65,7 +65,7 @@ public class UserRepositoryServiceTest {
         profile.setTotalDistance(distance);
         when(userRepository.save(profile)).thenReturn(profile);
         Profile updated = userRepositoryService.update(profile);
-        assertEquals(ranking + 1, updated.getRanking());
+        assertEquals(ranking, updated.getRanking());
         assertEquals(distance, updated.getTotalDistance());
     }
 
