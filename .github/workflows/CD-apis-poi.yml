@@ -6,13 +6,27 @@ on:
     paths: [ apis/poi/**, .github/workflows/CD-apis-poi.yml ]
 
 jobs:
-  build:
+  build-and-deploy:
+    env: 
+      # for github packages use this
+
+      DOCKER_REGISTRY_SERVER: docker.pkg.github.com
+      DOCKER_REGISTRY_SERVER_USERNAME: ${{ github.actor }}
+      DOCKER_REGISTRY_SERVER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+
+      # for ACR use this
+      # DOCKER_REGISTRY_SERVER: docker.pkg.github.com
+      # DOCKER_REGISTRY_SERVER_USERNAME: ${{ secrets.DOCKER_REGISTRY_SERVER_USERNAME}}
+      # DOCKER_REGISTRY_SERVER_PASSWORD: ${{ secrets.DOCKER_REGISTRY_SERVER_PASSWORD }}
+
+      API_NAME: poi
+      DOCKER_FILE_PATH: apis/{{env.API_NAME}}/web
 
     runs-on: ubuntu-latest
 
     defaults:
       run:
-        working-directory: apis/poi 
+        working-directory: apis/${{ env.API_NAME }} 
     steps:
     - name: Checkout the source code
       uses: actions/checkout@v2
@@ -20,11 +34,11 @@ jobs:
     - name: Build Docker image
       uses: docker/build-push-action@v1
       with:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-        registry: docker.pkg.github.com
-        repository: ${{ github.repository }}/poi
-        path: apis/poi/web
+        username: ${{ env.DOCKER_REGISTRY_SERVER_USERNAME }}
+        password: ${{ env.DOCKER_REGISTRY_SERVER_PASSWORD }}
+        registry: ${{ env.DOCKER_REGISTRY_SERVER }}
+        repository: ${{ github.repository }}/${{ env.API_NAME }}
+        path: ${{ env.DOCKER_FILE_PATH }}
         tags: ${{ github.sha }}
       env:
         SQL_USER: ${{ secrets.SQL_USER }}
@@ -40,9 +54,9 @@ jobs:
     - name: Package repo authenticate
       uses: azure/docker-login@v1
       with:
-        login-server: docker.pkg.github.com
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        login-server: ${{ env.DOCKER_REGISTRY_SERVER }}
+        username: ${{ env.DOCKER_REGISTRY_SERVER_USERNAME }}
+        password: ${{ env.DOCKER_REGISTRY_SERVER_PASSWORD }}
 
     - name: Set Web App GitHubPackage authentication
       uses: Azure/appservice-settings@v1
@@ -52,17 +66,17 @@ jobs:
           [
               {
                   "name": "DOCKER_REGISTRY_SERVER_PASSWORD",
-                  "value": "${{ secrets.GITHUB_TOKEN }}",
+                  "value": "${{ env.DOCKER_REGISTRY_SERVER_PASSWORD }}",
                   "slotSetting": false
               },
               {
                   "name": "DOCKER_REGISTRY_SERVER_URL",
-                  "value": "https://docker.pkg.github.com",
+                  "value": "https://${{ env.DOCKER_REGISTRY_SERVER_PASSWORD }}",
                   "slotSetting": false
               },
               {
                   "name": "DOCKER_REGISTRY_SERVER_USERNAME",
-                  "value": "${{ github.actor }}",
+                  "value": "${{ env.DOCKER_REGISTRY_SERVER_PASSWORD }}",
                   "slotSetting": false
               }
           ]
@@ -70,7 +84,7 @@ jobs:
       uses: azure/webapps-deploy@v2
       with: 
         app-name: openhacktibi123poi
-        images: docker.pkg.github.com/${{ github.repository }}/poi:${{ github.sha }}
+        images: ${{ env.DOCKER_REGISTRY_SERVER }}/${{ github.repository }}/${{ env.API_NAME }}:${{ github.sha }}
 
     - name: On error -> Create issue 
       if: ${{ failure() }}
