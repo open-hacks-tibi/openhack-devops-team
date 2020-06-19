@@ -12,7 +12,7 @@ on:
 jobs:
   build-and-deploy:
     env: 
-      DOCKER_FILE_PATH: apis/${{ env.API_NAME }}/web
+      DOCKER_FILE_PATH: apis/poi/web
 
       # for github packages use this
 
@@ -21,7 +21,7 @@ jobs:
       # DOCKER_REGISTRY_SERVER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
       # for ACR use this
-      DOCKER_REGISTRY_SERVER: ${{ env.DEPLOYMENT_PREFIX }}acr.azurecr.io
+      DOCKER_REGISTRY_SERVER: openhacktibi123acr.azurecr.io
       DOCKER_REGISTRY_SERVER_USERNAME: ${{ secrets.DOCKER_REGISTRY_SERVER_USERNAME}}
       DOCKER_REGISTRY_SERVER_PASSWORD: ${{ secrets.DOCKER_REGISTRY_SERVER_PASSWORD }}
 
