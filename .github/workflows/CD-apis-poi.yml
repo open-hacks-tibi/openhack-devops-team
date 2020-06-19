@@ -1,16 +1,18 @@
 name: CD POI .NET Core
+env: 
+  API_NAME: poi
+  DEPLOYMENT_PREFIX: openhacktibi123
+
 
 on:
   push:
     branches: [ master ]
-    paths: [ apis/poi/**, .github/workflows/CD-apis-poi.yml ]
+    paths: [ 'apis/${{ env.API_NAME }}/**', '.github/workflows/CD-apis-${{ env.API_NAME }}.yml' ]
 
 jobs:
   build-and-deploy:
     env: 
-      API_NAME: poi
       DOCKER_FILE_PATH: apis/${{ env.API_NAME }}/web
-      DEPLOYMENT_PREFIX: openhacktibi123
 
       # for github packages use this
 
