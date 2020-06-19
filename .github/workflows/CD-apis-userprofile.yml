@@ -42,7 +42,7 @@ jobs:
         password: ${{ env.DOCKER_REGISTRY_SERVER_PASSWORD }}
         registry: ${{ env.DOCKER_REGISTRY_SERVER }}
         repository: ${{ github.repository }}/${{ env.API_NAME }}
-        # path: ${{ env.DOCKER_FILE_PATH }}
+        path: ${{ env.DOCKER_FILE_PATH }}
         tags: ${{ github.sha }}
       env:
         SQL_USER: ${{ secrets.SQL_USER }}
