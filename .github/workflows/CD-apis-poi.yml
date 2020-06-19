@@ -7,7 +7,7 @@ env:
 on:
   push:
     branches: [ master ]
-    paths: [ 'apis/${{ env.API_NAME }}/**', '.github/workflows/CD-apis-${{ env.API_NAME }}.yml' ]
+    paths: [ apis/poi/**, .github/workflows/CD-apis-poi.yml ]
 
 jobs:
   build-and-deploy:
