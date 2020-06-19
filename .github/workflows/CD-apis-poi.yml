@@ -8,7 +8,10 @@ on:
 jobs:
   build-and-deploy:
     env: 
+      API_NAME: poi
+      DOCKER_FILE_PATH: apis/${{ env.API_NAME }}/web
       DEPLOYMENT_PREFIX: openhacktibi123
+
       # for github packages use this
 
       # DOCKER_REGISTRY_SERVER: docker.pkg.github.com
@@ -16,18 +19,15 @@ jobs:
       # DOCKER_REGISTRY_SERVER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
       # for ACR use this
-      DOCKER_REGISTRY_SERVER: '${{ env.DEPLOYMENT_PREFIX }}acr.azurecr.io'
+      DOCKER_REGISTRY_SERVER: ${{ env.DEPLOYMENT_PREFIX }}acr.azurecr.io
       DOCKER_REGISTRY_SERVER_USERNAME: ${{ secrets.DOCKER_REGISTRY_SERVER_USERNAME}}
       DOCKER_REGISTRY_SERVER_PASSWORD: ${{ secrets.DOCKER_REGISTRY_SERVER_PASSWORD }}
-
-      API_NAME: poi
-      DOCKER_FILE_PATH: apis/${{ env.API_NAME }}/web
 
     runs-on: ubuntu-latest
 
     defaults:
       run:
-        working-directory: 'apis/${{ env.API_NAME }}'
+        working-directory: apis/${{ env.API_NAME }}
     steps:
     - name: Checkout the source code
       uses: actions/checkout@v2
@@ -44,7 +44,7 @@ jobs:
       env:
         SQL_USER: ${{ secrets.SQL_USER }}
         SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
-        SQL_SERVER: '${{ env.DEPLOYMENT_PREFIX }}sql.database.windows.net'
+        SQL_SERVER: ${{ env.DEPLOYMENT_PREFIX }}sql.database.windows.net
         SQL_DBNAME: mydrivingDB
 
     - name: 'Login via Azure CLI'
