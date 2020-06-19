@@ -20,7 +20,7 @@ jobs:
       DOCKER_REGISTRY_SERVER: docker.pkg.github.com
       DOCKER_REGISTRY_SERVER_USERNAME: ${{ github.actor }}
       READ_PACKAGE_TOKEN: ${{ secrets.READ_PACKAGE_TOKEN }}
-      WRITE_PACKAGE_TOKEN: ${{ secrets.GTIHUB_TOKEN }}
+      WRITE_PACKAGE_TOKEN: ${{ secrets.WRITE_PACKAGE_TOKEN }}
 
       # for ACR use this
       # DOCKER_REGISTRY_SERVER: openhacktibi123acr.azurecr.io
