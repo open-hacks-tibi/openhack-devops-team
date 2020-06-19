@@ -17,14 +17,14 @@ jobs:
 
       # for github packages use this
 
-      # DOCKER_REGISTRY_SERVER: docker.pkg.github.com
-      # DOCKER_REGISTRY_SERVER_USERNAME: ${{ github.actor }}
-      # DOCKER_REGISTRY_SERVER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+      DOCKER_REGISTRY_SERVER: docker.pkg.github.com
+      DOCKER_REGISTRY_SERVER_USERNAME: ${{ github.actor }}
+      DOCKER_REGISTRY_SERVER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
       # for ACR use this
-      DOCKER_REGISTRY_SERVER: openhacktibi123acr.azurecr.io
-      DOCKER_REGISTRY_SERVER_USERNAME: ${{ secrets.DOCKER_REGISTRY_SERVER_USERNAME}}
-      DOCKER_REGISTRY_SERVER_PASSWORD: ${{ secrets.DOCKER_REGISTRY_SERVER_PASSWORD }}
+      # DOCKER_REGISTRY_SERVER: openhacktibi123acr.azurecr.io
+      # DOCKER_REGISTRY_SERVER_USERNAME: ${{ secrets.DOCKER_REGISTRY_SERVER_USERNAME}}
+      # DOCKER_REGISTRY_SERVER_PASSWORD: ${{ secrets.DOCKER_REGISTRY_SERVER_PASSWORD }}
 
     runs-on: ubuntu-latest
 
@@ -58,7 +58,7 @@ jobs:
     - name: Package repo authenticate
       uses: azure/docker-login@v1
       with:
-        login-server: ${{ env.DOCKER_REGISTRY_SERVER }}
+        login-server: ${{ env.DOCKER_REGISTRY_SERVER }}/${{ github.repository_owner	}}
         username: ${{ env.DOCKER_REGISTRY_SERVER_USERNAME }}
         password: ${{ env.DOCKER_REGISTRY_SERVER_PASSWORD }}
 
@@ -76,7 +76,7 @@ jobs:
               },
               {
                   "name": "DOCKER_REGISTRY_SERVER_URL",
-                  "value": "https://${{ env.DOCKER_REGISTRY_SERVER }}",
+                  "value": "https://${{ env.DOCKER_REGISTRY_SERVER }}/${{ github.repository_owner	}}",
                   "slotSetting": false
               },
               {
