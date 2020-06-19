@@ -1,4 +1,4 @@
-name: CI/CD UserProfile nodejs
+name: CI UserProfile nodejs
 
 on:
   push:
@@ -33,21 +33,6 @@ jobs:
     - name: Test Userprofile
       run: npm run test --if-exists
 
-    - name: Build Docker image
-      uses: docker/build-push-action@v1
-      env:
-        SQL_USER: ${{ secrets.SQL_USER }}
-        SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
-        SQL_SERVER: openhacktibi123sql.database.windows.net
-        SQL_DBNAME: mydrivingDB
-      with:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-        registry: docker.pkg.github.com
-        repository: ${{ github.repository }}/userprofile
-        path: apis/userprofile
-        tag_with_ref: true
-        
     - name: On error -> Create issue 
       if: ${{ failure() }}
       uses: actions/github-script@v2

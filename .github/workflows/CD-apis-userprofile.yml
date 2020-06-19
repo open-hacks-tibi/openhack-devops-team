@@ -1,15 +1,15 @@
-name: CD POI .NET Core
+name: CD Userprofile nodejs
 env: 
-  API_NAME: poi
+  API_NAME: userprofile
   DEPLOYMENT_PREFIX: openhacktibi123
   DEPLOYMENT_SLOT: staging
-  WORKING_DIRECTORY: apis/poi
-  DOCKER_FILE_PATH: apis/poi/web
+  WORKING_DIRECTORY: apis/userprofile
+  DOCKER_FILE_PATH: apis/userprofile
 
 on:
   push:
     branches: [ master ]
-    paths: [ apis/poi/**, .github/workflows/CD-apis-poi.yml ]
+    paths: [ apis/userprofile/**, .github/workflows/CD-apis-userprofile.yml ]
 
 jobs:
   build-and-deploy:
@@ -42,7 +42,7 @@ jobs:
         password: ${{ env.DOCKER_REGISTRY_SERVER_PASSWORD }}
         registry: ${{ env.DOCKER_REGISTRY_SERVER }}
         repository: ${{ github.repository }}/${{ env.API_NAME }}
-        path: ${{ env.DOCKER_FILE_PATH }}
+        # path: ${{ env.DOCKER_FILE_PATH }}
         tags: ${{ github.sha }}
       env:
         SQL_USER: ${{ secrets.SQL_USER }}

@@ -1,15 +1,16 @@
-name: CD POI .NET Core
+name: CD Trips .NET Core
 env: 
-  API_NAME: poi
+  API_NAME: trips
   DEPLOYMENT_PREFIX: openhacktibi123
   DEPLOYMENT_SLOT: staging
-  WORKING_DIRECTORY: apis/poi
-  DOCKER_FILE_PATH: apis/poi/web
+  WORKING_DIRECTORY: apis/trips
+  DOCKER_FILE_PATH: apis/trips
+
 
 on:
   push:
     branches: [ master ]
-    paths: [ apis/poi/**, .github/workflows/CD-apis-poi.yml ]
+    paths: [ apis/trips/**, .github/workflows/CD-apis-trips.yml ]
 
 jobs:
   build-and-deploy:

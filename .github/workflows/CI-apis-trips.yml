@@ -1,14 +1,11 @@
-name: CI/CD Trips go
+name: CI Trips golang
 
 on:
-  push:
-    branches: [ master ]
-    paths: [ apis/trips/**, .github/workflows/CI-apis-trip.yml ]
   pull_request:
     branches: [ master ]
     paths: 
       - apis/trips/**
-      - .github/workflows/CI-apis-trip.yml
+      - .github/workflows/CI-apis-trips.yml
 
 jobs:
   build:
@@ -30,21 +27,6 @@ jobs:
     - name: Test trips
       run: go test ./tests
 
-    - name: Build Docker image
-      uses: docker/build-push-action@v1
-      env:
-        SQL_USER: ${{ secrets.SQL_USER }}
-        SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
-        SQL_SERVER: openhacktibi123sql.database.windows.net
-        SQL_DBNAME: mydrivingDB
-      with:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-        registry: docker.pkg.github.com
-        repository: ${{ github.repository }}/trips
-        path: apis/trips
-        tag_with_ref: true
-        
     - name: On error -> Create issue 
       if: ${{ failure() }}
       uses: actions/github-script@v2
