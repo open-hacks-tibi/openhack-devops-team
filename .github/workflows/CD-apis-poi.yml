@@ -74,12 +74,12 @@ jobs:
               },
               {
                   "name": "DOCKER_REGISTRY_SERVER_URL",
-                  "value": "https://${{ env.DOCKER_REGISTRY_SERVER_PASSWORD }}",
+                  "value": "https://${{ env.DOCKER_REGISTRY_SERVER }}",
                   "slotSetting": false
               },
               {
                   "name": "DOCKER_REGISTRY_SERVER_USERNAME",
-                  "value": "${{ env.DOCKER_REGISTRY_SERVER_PASSWORD }}",
+                  "value": "${{ env.DOCKER_REGISTRY_SERVER_USERNAME }}",
                   "slotSetting": false
               }
           ]
