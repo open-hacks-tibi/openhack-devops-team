@@ -16,8 +16,8 @@ jobs:
 
     env: 
 
-      DOCKER_FILE_PATH: ${{ $(echo apis/"$API_NAME"/web) }} 
       DOCKER_TAG: ${{ $(echo $GITHUB_SHA | cut -c 1-6) }}
+      DOCKER_FILE_PATH: ${{ $(echo apis/$API_NAME/web) }} 
 
       # for github packages use this
 
