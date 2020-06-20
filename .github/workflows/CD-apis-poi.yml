@@ -23,7 +23,7 @@ jobs:
       READ_PACKAGE_TOKEN: ${{ secrets.READ_PACKAGE_TOKEN }}
       WRITE_PACKAGE_TOKEN: ${{ secrets.WRITE_PACKAGE_TOKEN }}
 
-      # for ACR use this
+      # for ACR use this and chenge first step
 
       # DOCKER_REGISTRY_SERVER_USERNAME: ${{ secrets.DOCKER_REGISTRY_SERVER_USERNAME}}
       # READ_PACKAGE_TOKEN: ${{ secrets.DOCKER_REGISTRY_SERVER_PASSWORD }}
