@@ -19,14 +19,12 @@ jobs:
 
       # for github packages use this
 
-      DOCKER_REGISTRY_SERVER: docker.pkg.github.com
       DOCKER_REGISTRY_SERVER_USERNAME: ${{ github.actor }}
       READ_PACKAGE_TOKEN: ${{ secrets.READ_PACKAGE_TOKEN }}
       WRITE_PACKAGE_TOKEN: ${{ secrets.WRITE_PACKAGE_TOKEN }}
 
       # for ACR use this
 
-      # DOCKER_REGISTRY_SERVER: ${{ $(echo "$DEPLOYMENT_PREFIX"acr.azurecr.io) }}
       # DOCKER_REGISTRY_SERVER_USERNAME: ${{ secrets.DOCKER_REGISTRY_SERVER_USERNAME}}
       # READ_PACKAGE_TOKEN: ${{ secrets.DOCKER_REGISTRY_SERVER_PASSWORD }}
       # WRITE_PACKAGE_TOKEN: ${{ secrets.DOCKER_REGISTRY_SERVER_PASSWORD }}
@@ -37,10 +35,16 @@ jobs:
         echo ::set-env name=DOCKER_TAG::"$(echo $GITHUB_SHA | cut -c 1-6)"
         echo ::set-env name=DOCKER_REPOSITORY::"$(echo $GITHUB_REPOSITORY/$API_NAME)"
         echo ::set-env name=SQL_SERVER::"$(echo ""$DEPLOYMENT_PREFIX""sql.database.windows.net)"
-        echo "GITHUB_REPOSITORY_OWNER: $GITHUB_REPOSITORY_OWNER"
+        echo ::set-env name=DOCKER_REGISTRY_SERVER::"$(echo docker.pkg.github.com/$GITHUB_REPOSITORY_OWNER)"
+      # echo ::set-env name=DOCKER_REGISTRY_SERVER::$(echo ""$DEPLOYMENT_PREFIX""acr.azurecr.io)
+
+    - name: Print environment variables 
+      run: |
         echo "DOCKER_TAG: $DOCKER_TAG"
         echo "DOCKER_REPOSITORY: $DOCKER_REPOSITORY"
         echo "SQL_SERVER: $SQL_SERVER"
+        echo "DOCKER_REGISTRY_SERVER: $DOCKER_REGISTRY_SERVER"
+        env
 
     - name: Checkout the source code
       uses: actions/checkout@v2
@@ -70,7 +74,7 @@ jobs:
     # - name: Package repo authenticate
     #   uses: azure/docker-login@v1
     #   with:
-    #     login-server: ${{ env.DOCKER_REGISTRY_SERVER }}/${{ github.repository_owner	}}
+    #     login-server: ${{ env.DOCKER_REGISTRY_SERVER }}
     #     username: ${{ env.DOCKER_REGISTRY_SERVER_USERNAME }}
     #     password: ${{ env.READ_PACKAGE_TOKEN }}
 
@@ -88,7 +92,7 @@ jobs:
               },
               {
                   "name": "DOCKER_REGISTRY_SERVER_URL",
-                  "value": "https://${{ env.DOCKER_REGISTRY_SERVER }}/${{ github.repository_owner	}}",
+                  "value": "https://${{ env.DOCKER_REGISTRY_SERVER }}",
                   "slotSetting": false
               },
               {
