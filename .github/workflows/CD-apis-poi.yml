@@ -1,7 +1,7 @@
 name: CD POI .NET Core
 env: 
   API_NAME: poi
-  DOCKER_FILE_PATH: api/poi/web
+  DOCKER_FILE_PATH: apis/poi/web
   DEPLOYMENT_PREFIX: openhacktibi123
   DEPLOYMENT_SLOT: production
   DATABASE_NAME: mydrivingDB
@@ -32,11 +32,15 @@ jobs:
       # WRITE_PACKAGE_TOKEN: ${{ secrets.DOCKER_REGISTRY_SERVER_PASSWORD }}
 
     steps:
-    - name: Setting environment variables 
+    - name: Setting dynamic environment variables 
       run: |
         echo ::set-env name=DOCKER_TAG::"$(echo $GITHUB_SHA | cut -c 1-6)"
-        echo ::set-env name=SQL_SERVER::"$(echo ""$DEPLOYMENT_PREFIX""sql.database.windows.net)"
         echo ::set-env name=DOCKER_REPOSITORY::"$(echo $GITHUB_REPOSITORY/$API_NAME)"
+        echo ::set-env name=SQL_SERVER::"$(echo ""$DEPLOYMENT_PREFIX""sql.database.windows.net)"
+        echo "GITHUB_REPOSITORY_OWNER: $GITHUB_REPOSITORY_OWNER"
+        echo "DOCKER_TAG: $DOCKER_TAG"
+        echo "DOCKER_REPOSITORY: $DOCKER_REPOSITORY"
+        echo "SQL_SERVER: $SQL_SERVER"
 
     - name: Checkout the source code
       uses: actions/checkout@v2
