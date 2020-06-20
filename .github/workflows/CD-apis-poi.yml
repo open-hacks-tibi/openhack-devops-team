@@ -2,9 +2,8 @@ name: CD POI .NET Core
 env: 
   API_NAME: poi
   DEPLOYMENT_PREFIX: openhacktibi123
-  DEPLOYMENT_SLOT: staging
-  WORKING_DIRECTORY: apis/poi
-  DOCKER_FILE_PATH: apis/poi/web
+  DEPLOYMENT_SLOT: production
+  DATABASE_NAME: mydrivingDB
 
 on:
   push:
@@ -13,7 +12,12 @@ on:
 
 jobs:
   build-and-deploy:
+    runs-on: ubuntu-latest
+
     env: 
+
+      DOCKER_FILE_PATH: ${{ $(echo apis/"$API_NAME"/web) }} 
+      DOCKER_TAG: ${{ $(echo $GITHUB_SHA | cut -c 1-6) }}
 
       # for github packages use this
 
@@ -23,16 +27,12 @@ jobs:
       WRITE_PACKAGE_TOKEN: ${{ secrets.WRITE_PACKAGE_TOKEN }}
 
       # for ACR use this
-      # DOCKER_REGISTRY_SERVER: openhacktibi123acr.azurecr.io
+
+      # DOCKER_REGISTRY_SERVER: ${{ $(echo "$DEPLOYMENT_PREFIX"acr.azurecr.io) }}
       # DOCKER_REGISTRY_SERVER_USERNAME: ${{ secrets.DOCKER_REGISTRY_SERVER_USERNAME}}
       # READ_PACKAGE_TOKEN: ${{ secrets.DOCKER_REGISTRY_SERVER_PASSWORD }}
       # WRITE_PACKAGE_TOKEN: ${{ secrets.DOCKER_REGISTRY_SERVER_PASSWORD }}
 
-    runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: ${{ env.WORKING_DIRECTORY }}
     steps:
     - name: Checkout the source code
       uses: actions/checkout@v2
@@ -45,24 +45,26 @@ jobs:
         registry: ${{ env.DOCKER_REGISTRY_SERVER }}
         repository: ${{ github.repository }}/${{ env.API_NAME }}
         path: ${{ env.DOCKER_FILE_PATH }}
-        tags: ${{ github.sha }}
+        tags: ${{ env.DOCKER_TAG }}
       env:
         SQL_USER: ${{ secrets.SQL_USER }}
         SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
-        SQL_SERVER: ${{ env.DEPLOYMENT_PREFIX }}sql.database.windows.net
-        SQL_DBNAME: mydrivingDB
+        SQL_SERVER: ${{ $(echo "$DEPLOYMENT_PREFIX"sql.database.windows.net) }} 
+        SQL_DBNAME: ${{ env.DATABASE_NAME }}
 
     - name: 'Login via Azure CLI'
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_DEPLOYMENT_CREDENTIALS }}
 
-    - name: Package repo authenticate
-      uses: azure/docker-login@v1
-      with:
-        login-server: ${{ env.DOCKER_REGISTRY_SERVER }}/${{ github.repository_owner	}}
-        username: ${{ env.DOCKER_REGISTRY_SERVER_USERNAME }}
-        password: ${{ env.READ_PACKAGE_TOKEN }}
+    # https://docs.microsoft.com/en-us/cli/azure/acr?view=azure-cli-latest#az-acr-build
+
+    # - name: Package repo authenticate
+    #   uses: azure/docker-login@v1
+    #   with:
+    #     login-server: ${{ env.DOCKER_REGISTRY_SERVER }}/${{ github.repository_owner	}}
+    #     username: ${{ env.DOCKER_REGISTRY_SERVER_USERNAME }}
+    #     password: ${{ env.READ_PACKAGE_TOKEN }}
 
     - name: Set Web App GitHubPackage authentication
       uses: Azure/appservice-settings@v1
@@ -88,7 +90,7 @@ jobs:
               },
               {
                 "name": "SQL_DBNAME",
-                "value": "mydrivingDB",
+                "value": "${{ env.DATABASE_NAME }}",
                 "slotSetting": false
               },
               {
@@ -117,7 +119,7 @@ jobs:
       uses: azure/webapps-deploy@v2
       with: 
         app-name: '${{ env.DEPLOYMENT_PREFIX }}${{ env.API_NAME }}'
-        images: ${{ env.DOCKER_REGISTRY_SERVER }}/${{ github.repository }}/${{ env.API_NAME }}:${{ github.sha }}
+        images: ${{ env.DOCKER_REGISTRY_SERVER }}/${{ github.repository }}/${{ env.API_NAME }}:${{ env.DOCKER_TAG }}
         slot-name: ${{ env.DEPLOYMENT_SLOT }}
 
     - name: On error -> Create issue 
