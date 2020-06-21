@@ -11,7 +11,7 @@ on:
       - .github/workflows/CI-apis-userprofile.yml
 
 jobs:
-  build:
+  build-and-test:
 
     runs-on: ubuntu-latest
 
